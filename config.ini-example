@@ -9,7 +9,13 @@ repositories[] = '/home/git/repositories/' ; Path to your repositories
 ;repositories[] = 'C:\Path\to\Repos\' ; Path to your repositories
 
 ; You can hide repositories from GitList, just copy this for each repository you want to hide
+; '*' may be used for globbing
+; path ending with '/' means all sub-directories will be hidden
 ; hidden[] = '/home/git/repositories/BetaTest'
+; hidden[] = '/home/git/repositories/test_*'
+
+; hide repositories that don't have anonymous access
+hide_unless_gitdaemon = false
 
 [app]
 debug = false

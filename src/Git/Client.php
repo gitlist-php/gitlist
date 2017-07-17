@@ -9,6 +9,7 @@ class Client extends BaseClient
     protected $defaultBranch;
     protected $hidden;
     protected $projects;
+    protected $hideUnlessGitdaemon;
 
     public function __construct($options = null)
     {
@@ -16,6 +17,7 @@ class Client extends BaseClient
         $this->setDefaultBranch($options['default_branch']);
         $this->setHidden($options['hidden']);
         $this->setProjects($options['projects']);
+        $this->hideUnlessGitdaemon = (bool) $options['hide_unless_gitdaemon'];
     }
 
     public function getRepositoryFromName($paths, $repo)
@@ -82,7 +84,7 @@ class Client extends BaseClient
                 $isRepository = file_exists($file->getPathname() . '/.git/HEAD');
 
                 if ($isRepository || $isBare) {
-                    if (in_array($file->getPathname(), $this->getHidden())) {
+                    if ($this->isRepositoryHidden($file)) {
                         continue;
                     }
 
@@ -124,6 +126,26 @@ class Client extends BaseClient
         return $repositories;
     }
 
+    private function isRepositoryHidden($dir)
+    {
+        /**
+         * @todo Optimize with an associative array and a list of recursive exclusions
+         */
+        $path = $dir->getPathname();
+        if (in_array($path, $this->getHidden())) {
+            return true;
+        }
+        if ($this->hideUnlessGitdaemon && !file_exists($path . '/git-daemon-export-ok')) {
+            return true;
+        }
+        foreach ($this->getHidden() as $hide) {
+            if (substr($hide, -1) === '/' && strncmp($path, $hide, strlen($hide)) === 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Set default branch as a string.
      *
@@ -163,7 +185,16 @@ class Client extends BaseClient
      */
     protected function setHidden($hidden)
     {
-        $this->hidden = $hidden;
+        $this->hidden = array();
+        foreach ($hidden as $dir) {
+            if (strpos($dir, '*') !== false) {
+                foreach (glob($dir) as $d) {
+                    $this->hidden[] = $d;
+                }
+            } else if (is_dir($dir)) {
+                $this->hidden[] = $dir;
+            }
+        }
 
         return $this;
     }
