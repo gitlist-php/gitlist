@@ -1,0 +1,17 @@
+version: "3"
+services:
+  php:
+    build: .docker/php
+    volumes:
+      - .:/var/www/html
+      - .:/repos/gitlist
+
+  nginx:
+    image: nginx
+    volumes:
+      - .:/var/www/html
+      - ./.docker/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8080:80"
+    links:
+      - php
