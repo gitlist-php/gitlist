@@ -73,7 +73,7 @@ class Application extends SilexApplication
         $this->register(new RoutingServiceProvider());
         $this->register(new RoutingUtilServiceProvider());
 
-        $this['twig'] = $this->extend('twig', function ($twig, $app) {
+        $this['twig'] = $this->factory($this->extend('twig', function ($twig, $app) {
             $twig->addFilter(new \Twig_SimpleFilter('htmlentities', 'htmlentities'));
             $twig->addFilter(new \Twig_SimpleFilter('md5', 'md5'));
             $twig->addFilter(new \Twig_SimpleFilter('format_date', array($app, 'formatDate')));
@@ -81,14 +81,14 @@ class Application extends SilexApplication
             $twig->addFunction(new \Twig_SimpleFunction('avatar', array($app, 'getAvatar')));
 
             return $twig;
+        }));
+
+        $this['escaper.argument'] = $this->factory(function() {
+            return new Escaper\ArgumentEscaper();
         });
 
-        $this['escaper.argument'] = function() {
-            return new Escaper\ArgumentEscaper();
-        };
-
         // Handle errors
-        $this->error($app->factory(function (\Exception $e, $code) use ($app) {
+        $this->error(function (\Exception $e, $code) use ($app) {
             if ($app['debug']) {
                 return;
             }
@@ -96,14 +96,14 @@ class Application extends SilexApplication
             return $app['twig']->render('error.twig', array(
                 'message' => $e->getMessage(),
             ));
-        }));
+        });
 
-        $this->finish($app->factory(function () use ($app, $config) {
+        $this->finish(function () use ($app, $config) {
             if (!$config->get('app', 'cache')) {
                 $fs = new Filesystem();
                 $fs->remove($app['cache.archives']);
             }
-        }));
+        });
     }
 
     public function formatDate($date)

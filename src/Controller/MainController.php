@@ -13,21 +13,21 @@ class MainController implements ControllerProviderInterface
     {
         $route = $app['controllers_factory'];
 
-        $route->get('/', $app->factory(function() use ($app) {
+        $route->get('/', function() use ($app) {
             $repositories = $app['git']->getRepositories($app['git.repos']);
 
             return $app['twig']->render('index.twig', array(
                 'repositories'   => $repositories,
             ));
-        }))->bind('homepage');
+        })->bind('homepage');
 
 
-        $route->get('/refresh', $app->factory(function(Request $request) use ($app ) {
+        $route->get('/refresh', function(Request $request) use ($app ) {
             # Go back to calling page
             return $app->redirect($request->headers->get('Referer'));
-        }))->bind('refresh');
+        })->bind('refresh');
 
-        $route->get('{repo}/stats/{branch}', $app->factory(function($repo, $branch) use ($app) {
+        $route->get('{repo}/stats/{branch}', function($repo, $branch) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             if ($branch === null) {
@@ -45,13 +45,13 @@ class MainController implements ControllerProviderInterface
                 'stats'          => $stats,
                 'authors'        => $authors,
             ));
-        }))->assert('repo', $app['util.routing']->getRepositoryRegex())
-           ->assert('branch', $app['util.routing']->getBranchRegex())
-           ->value('branch', null)
-           ->convert('branch', 'escaper.argument:escape')
-           ->bind('stats');
+        })->assert('repo', $app['util.routing']->getRepositoryRegex())
+          ->assert('branch', $app['util.routing']->getBranchRegex())
+          ->value('branch', null)
+          ->convert('branch', 'escaper.argument:escape')
+          ->bind('stats');
 
-        $route->get('{repo}/{branch}/rss/', $app->factory(function($repo, $branch) use ($app) {
+        $route->get('{repo}/{branch}/rss/', function($repo, $branch) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             if ($branch === null) {
@@ -67,11 +67,11 @@ class MainController implements ControllerProviderInterface
             ));
 
             return new Response($html, 200, array('Content-Type' => 'application/rss+xml'));
-        }))->assert('repo', $app['util.routing']->getRepositoryRegex())
-           ->assert('branch', $app['util.routing']->getBranchRegex())
-           ->value('branch', null)
-           ->convert('branch', 'escaper.argument:escape')
-           ->bind('rss');
+        })->assert('repo', $app['util.routing']->getRepositoryRegex())
+          ->assert('branch', $app['util.routing']->getBranchRegex())
+          ->value('branch', null)
+          ->convert('branch', 'escaper.argument:escape')
+          ->bind('rss');
 
         return $route;
     }

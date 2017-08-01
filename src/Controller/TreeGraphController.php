@@ -14,7 +14,7 @@ class TreeGraphController implements ControllerProviderInterface
 
         $route->get(
             '{repo}/treegraph/{commitishPath}',
-            $app->factory(function ($repo, $commitishPath) use ($app) {
+            function ($repo, $commitishPath) use ($app) {
                 /** @var \GitList\Git\Repository $repository */
                 $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
@@ -62,11 +62,11 @@ class TreeGraphController implements ControllerProviderInterface
                     )
                 );
             }
-        ))->assert('repo', $app['util.routing']->getRepositoryRegex())
-          ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
-          ->value('commitishPath', null)
-          ->convert('commitishPath', 'escaper.argument:escape')
-          ->bind('treegraph');
+        )->assert('repo', $app['util.routing']->getRepositoryRegex())
+         ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
+         ->value('commitishPath', null)
+         ->convert('commitishPath', 'escaper.argument:escape')
+         ->bind('treegraph');
 
         return $route;
     }

@@ -15,8 +15,8 @@ class RoutingUtilServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $app)
     {
-        $app['util.routing'] = function () use ($app) {
+        $app['util.routing'] = $app->factory(function () use ($app) {
             return new Routing($app);
-        };
+        });
     }
 }

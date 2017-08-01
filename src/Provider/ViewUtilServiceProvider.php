@@ -15,8 +15,8 @@ class ViewUtilServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $app)
     {
-        $app['util.view'] = function () {
+        $app['util.view'] = $app->factory(function () {
             return new View;
-        };
+        });
     }
 }

@@ -15,8 +15,8 @@ class RepositoryUtilServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $app)
     {
-        $app['util.repository'] = function () use ($app) {
+        $app['util.repository'] = $app->factory(function () use ($app) {
             return new Repository($app);
-        };
+        });
     }
 }
