@@ -88,7 +88,7 @@ class Application extends SilexApplication
         };
 
         // Handle errors
-        $this->error(function (\Exception $e, $code) use ($app) {
+        $this->error($app->factory(function (\Exception $e, $code) use ($app) {
             if ($app['debug']) {
                 return;
             }
@@ -96,14 +96,14 @@ class Application extends SilexApplication
             return $app['twig']->render('error.twig', array(
                 'message' => $e->getMessage(),
             ));
-        });
+        }));
 
-        $this->finish(function () use ($app, $config) {
+        $this->finish($app->factory(function () use ($app, $config) {
             if (!$config->get('app', 'cache')) {
                 $fs = new Filesystem();
                 $fs->remove($app['cache.archives']);
             }
-        });
+        }));
     }
 
     public function formatDate($date)

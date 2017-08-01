@@ -12,7 +12,7 @@ class BlobController implements ControllerProviderInterface
     {
         $route = $app['controllers_factory'];
 
-        $route->get('{repo}/blob/{commitishPath}', function ($repo, $commitishPath) use ($app) {
+        $route->get('{repo}/blob/{commitishPath}', $app->factory(function ($repo, $commitishPath) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             list($branch, $file) = $app['util.routing']
@@ -41,12 +41,12 @@ class BlobController implements ControllerProviderInterface
                 'branches'       => $repository->getBranches(),
                 'tags'           => $repository->getTags(),
             ));
-        })->assert('repo', $app['util.routing']->getRepositoryRegex())
-          ->assert('commitishPath', '.+')
-          ->convert('commitishPath', 'escaper.argument:escape')
-          ->bind('blob');
+        }))->assert('repo', $app['util.routing']->getRepositoryRegex())
+           ->assert('commitishPath', '.+')
+           ->convert('commitishPath', 'escaper.argument:escape')
+           ->bind('blob');
 
-        $route->get('{repo}/raw/{commitishPath}', function ($repo, $commitishPath) use ($app) {
+        $route->get('{repo}/raw/{commitishPath}', $app->factory(function ($repo, $commitishPath) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             list($branch, $file) = $app['util.routing']
@@ -65,10 +65,10 @@ class BlobController implements ControllerProviderInterface
             }
 
             return new Response($blob, 200, $headers);
-        })->assert('repo', $app['util.routing']->getRepositoryRegex())
-          ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
-          ->convert('commitishPath', 'escaper.argument:escape')
-          ->bind('blob_raw');
+        }))->assert('repo', $app['util.routing']->getRepositoryRegex())
+           ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
+           ->convert('commitishPath', 'escaper.argument:escape')
+           ->bind('blob_raw');
 
         return $route;
     }

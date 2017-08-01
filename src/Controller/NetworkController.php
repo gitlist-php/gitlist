@@ -15,7 +15,7 @@ class NetworkController implements ControllerProviderInterface
         $route = $app['controllers_factory'];
 
         $route->get('{repo}/network/{commitishPath}/{page}.json',
-            function ($repo, $commitishPath, $page) use ($app) {
+            $app->factory(function ($repo, $commitishPath, $page) use ($app) {
                 /** @var $repository Repository */
                 $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
@@ -86,17 +86,17 @@ class NetworkController implements ControllerProviderInterface
                     ), 200
                 );
             }
-        )->assert('repo', $app['util.routing']->getRepositoryRegex())
-        ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
-        ->value('commitishPath', null)
-        ->convert('commitishPath', 'escaper.argument:escape')
-        ->assert('page', '\d+')
-        ->value('page', '0')
-        ->bind('networkData');
+        ))->assert('repo', $app['util.routing']->getRepositoryRegex())
+          ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
+          ->value('commitishPath', null)
+          ->convert('commitishPath', 'escaper.argument:escape')
+          ->assert('page', '\d+')
+          ->value('page', '0')
+          ->bind('networkData');
 
         $route->get(
             '{repo}/network/{commitishPath}',
-            function ($repo, $commitishPath) use ($app) {
+            $app->factory(function ($repo, $commitishPath) use ($app) {
                 $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
                 if ($commitishPath === null) {
@@ -115,11 +115,11 @@ class NetworkController implements ControllerProviderInterface
                     )
                 );
             }
-        )->assert('repo', $app['util.routing']->getRepositoryRegex())
-        ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
-        ->value('commitishPath', null)
-        ->convert('commitishPath', 'escaper.argument:escape')
-        ->bind('network');
+        ))->assert('repo', $app['util.routing']->getRepositoryRegex())
+          ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
+          ->value('commitishPath', null)
+          ->convert('commitishPath', 'escaper.argument:escape')
+          ->bind('network');
 
         return $route;
     }

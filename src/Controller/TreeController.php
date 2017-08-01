@@ -13,7 +13,7 @@ class TreeController implements ControllerProviderInterface
     {
         $route = $app['controllers_factory'];
 
-        $route->get('{repo}/tree/{commitishPath}/', $treeController = function ($repo, $commitishPath = '') use ($app) {
+        $route->get('{repo}/tree/{commitishPath}/', $treeController = $app->factory(function ($repo, $commitishPath = '') use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
             if (!$commitishPath) {
                 $commitishPath = $repository->getHead();
@@ -43,12 +43,12 @@ class TreeController implements ControllerProviderInterface
                 'tags'           => $repository->getTags(),
                 'readme'         => $app['util.repository']->getReadme($repository, $branch, $tree ? "$tree" : ""),
             ));
-        })->assert('repo', $app['util.routing']->getRepositoryRegex())
-          ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
-          ->convert('commitishPath', 'escaper.argument:escape')
-          ->bind('tree');
+        }))->assert('repo', $app['util.routing']->getRepositoryRegex())
+           ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
+           ->convert('commitishPath', 'escaper.argument:escape')
+           ->bind('tree');
 
-        $route->post('{repo}/tree/{branch}/search', function (Request $request, $repo, $branch = '', $tree = '') use ($app) {
+        $route->post('{repo}/tree/{branch}/search', $app->factory(function (Request $request, $repo, $branch = '', $tree = '') use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
             if (!$branch) {
                 $branch = $repository->getHead();
@@ -68,12 +68,12 @@ class TreeController implements ControllerProviderInterface
                 'tags'           => $repository->getTags(),
                 'query'          => $query
             ));
-        })->assert('repo', $app['util.routing']->getRepositoryRegex())
-          ->assert('branch', $app['util.routing']->getBranchRegex())
-          ->convert('branch', 'escaper.argument:escape')
-          ->bind('search');
+        }))->assert('repo', $app['util.routing']->getRepositoryRegex())
+           ->assert('branch', $app['util.routing']->getBranchRegex())
+           ->convert('branch', 'escaper.argument:escape')
+           ->bind('search');
 
-        $route->get('{repo}/{format}ball/{branch}', function($repo, $format, $branch) use ($app) {
+        $route->get('{repo}/{format}ball/{branch}', $app->factory(function($repo, $format, $branch) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             $tree = $repository->getBranchTree($branch);
@@ -104,24 +104,24 @@ class TreeController implements ControllerProviderInterface
             $response = new BinaryFileResponse($file);
             $response->setContentDisposition('attachment', $filename);
             return $response;
-        })->assert('format', '(zip|tar)')
-          ->assert('repo', $app['util.routing']->getRepositoryRegex())
-          ->assert('branch', $app['util.routing']->getBranchRegex())
-          ->convert('branch', 'escaper.argument:escape')
-          ->bind('archive');
+        }))->assert('format', '(zip|tar)')
+           ->assert('repo', $app['util.routing']->getRepositoryRegex())
+           ->assert('branch', $app['util.routing']->getBranchRegex())
+           ->convert('branch', 'escaper.argument:escape')
+           ->bind('archive');
 
 
-        $route->get('{repo}/{branch}/', function($repo, $branch) use ($app, $treeController) {
+        $route->get('{repo}/{branch}/', $app->factory(function($repo, $branch) use ($app, $treeController) {
             return $treeController($repo, $branch);
-        })->assert('repo', $app['util.routing']->getRepositoryRegex())
-          ->assert('branch', $app['util.routing']->getBranchRegex())
-          ->convert('branch', 'escaper.argument:escape')
-          ->bind('branch');
+        }))->assert('repo', $app['util.routing']->getRepositoryRegex())
+           ->assert('branch', $app['util.routing']->getBranchRegex())
+           ->convert('branch', 'escaper.argument:escape')
+           ->bind('branch');
 
-        $route->get('{repo}/', function($repo) use ($app, $treeController) {
+        $route->get('{repo}/', $app->factory(function($repo) use ($app, $treeController) {
             return $treeController($repo);
-        })->assert('repo', $app['util.routing']->getRepositoryRegex())
-          ->bind('repository');
+        }))->assert('repo', $app['util.routing']->getRepositoryRegex())
+           ->bind('repository');
 
         return $route;
     }

@@ -17,7 +17,7 @@ class GitServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $app)
     {
-        $app['git'] = function () use ($app) {
+        $app['git'] = $app->factory(function () use ($app) {
             $options['path'] = $app['git.client'];
             $options['hidden'] = $app['git.hidden'];
             $options['projects'] = $app['git.projects'];
@@ -25,6 +25,6 @@ class GitServiceProvider implements ServiceProviderInterface
             $options['default_branch'] = $app['git.default_branch'];
 
             return new Client($options);
-        };
+        });
     }
 }
