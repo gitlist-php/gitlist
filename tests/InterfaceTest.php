@@ -269,8 +269,6 @@ class InterfaceTest extends WebTestCase
         $client = $this->createClient();
 
         $crawler = $client->request('GET', '/GitTest/commits/master/test.php');
-// temporary debug code:
-var_dump($client->getResponse()->getContent()); die();
         $this->assertTrue($client->getResponse()->isOk());
         $this->assertEquals('Initial commit', $crawler->filter('.table tbody tr td h4')->eq(0)->text());
 
