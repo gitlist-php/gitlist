@@ -11,7 +11,7 @@
 # Apache 2.4
 <IfModule mod_authz_core.c>
 	<Files config.ini>
-        Require all denied
+		Require all denied
 	</Files>
 </IfModule>
 
