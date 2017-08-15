@@ -17,7 +17,7 @@ class Client extends BaseClient
         if (isset($options['default_branch'])) { $this->setDefaultBranch($options['default_branch']); }
         if (isset($options['hidden'])) { $this->setHidden($options['hidden']); }
         if (isset($options['projects'])) { $this->setProjects($options['projects']); }
-        if (isset($options['hide_unless_gitdaemon']) { $this->hideUnlessGitdaemon($options['hide_unless_gitdaemon']); }
+        if (isset($options['hide_unless_gitdaemon'])) { $this->hideUnlessGitdaemon($options['hide_unless_gitdaemon']); }
     }
 
     public function getRepositoryFromName($paths, $repo)
