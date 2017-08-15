@@ -204,7 +204,7 @@ class Client extends BaseClient
      *
      * @return array List of repositories to hide
      */
-    protected function getHideUnlessGitdeamon()
+    protected function getHideUnlessGitdaemon()
     {
         return $this->hideUnlessGitdeamon;
     }
@@ -215,7 +215,7 @@ class Client extends BaseClient
      * @param array $hidden List of repositories to hide
      * @return object
      */
-    protected function setHideUnlessGitdeamon($hidden)
+    protected function setHideUnlessGitdaemon($hidden)
     {
         $this->hideUnlessGitdeamon = $hidden;
 
