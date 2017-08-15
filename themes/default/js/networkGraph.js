@@ -1,6 +1,6 @@
 /**
  * Network Graph JS
- * This File is a part of the GitList Project at http://gitlist.org
+ * This File is a part of the GitList Project at https://gitlist-php.github.io/gitlist/
  *
  * @license http://www.opensource.org/licenses/bsd-license.php
  * @author Lukas Domnick <lukx@lukx.de> http://github.com/lukx

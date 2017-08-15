@@ -9,7 +9,7 @@
          processIsolation="false"
          stopOnFailure="true"
          syntaxCheck="true"
-         bootstrap="./vendor/autoload.php"
+         bootstrap="./tests/bootstrap.php"
 >
     <testsuites>
         <testsuite name="GitList Test Suite">
