@@ -86,9 +86,9 @@ class BlobController implements ControllerProviderInterface
                 'commits'        => $filePatchesLog,
             ));
         })->assert('repo', $app['util.routing']->getRepositoryRegex())
-            ->assert('commitishPath', '.+')
-            ->convert('commitishPath', 'escaper.argument:escape')
-            ->bind('logpatch');
+          ->assert('commitishPath', '.+')
+          ->convert('commitishPath', 'escaper.argument:escape')
+          ->bind('logpatch');
 
         return $route;
     }
