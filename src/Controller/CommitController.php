@@ -3,7 +3,7 @@
 namespace GitList\Controller;
 
 use Silex\Application;
-use Silex\ControllerProviderInterface;
+use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class CommitController implements ControllerProviderInterface
@@ -34,7 +34,7 @@ class CommitController implements ControllerProviderInterface
             list($branch, $file) = $app['util.repository']->extractRef($repository, $branch, $file);
 
             $type = $file ? "$branch -- \"$file\"" : $branch;
-            $pager = $app['util.view']->getPager($app['request']->get('page'), $repository->getTotalCommits($type));
+            $pager = $app['util.view']->getPager($app['request_stack']->getCurrentRequest()->get('page'), $repository->getTotalCommits($type));
             $commits = $repository->getPaginatedCommits($type, $pager['current']);
             $categorized = array();
 
@@ -44,7 +44,7 @@ class CommitController implements ControllerProviderInterface
                 $categorized[$date][] = $commit;
             }
 
-            $template = $app['request']->isXmlHttpRequest() ? 'commits_list.twig' : 'commits.twig';
+            $template = $app['request_stack']->getCurrentRequest()->isXmlHttpRequest() ? 'commits_list.twig' : 'commits.twig';
 
             return $app['twig']->render($template, array(
                 'page'           => 'commits',

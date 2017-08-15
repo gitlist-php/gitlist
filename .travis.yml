@@ -2,10 +2,9 @@ language: php
 
 before_script:
   - curl -s http://getcomposer.org/installer | php
-  - php composer.phar install --dev
+  - php composer.phar install
 
 php:
-  - 5.3
-  - 5.4
+  - 5.5.9
 
 script: phpunit
