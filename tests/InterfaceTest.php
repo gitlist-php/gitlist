@@ -25,7 +25,7 @@ class InterfaceTest extends WebTestCase
         $fs->mkdir(self::$tmpdir);
 
         if (!is_writable(self::$tmpdir)) {
-            $this->markTestSkipped('There are no write permissions in order to create test repositories.');
+            self::markTestSkipped('There are no write permissions in order to create test repositories.');
         }
 
         $options['path'] = getenv('GIT_CLIENT') ?: '/usr/bin/git';
