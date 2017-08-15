@@ -3,8 +3,8 @@ NAME = gitlist
 DESCRIPTION = "An elegant and modern git repository viewer"
 LICENSE = New BSD
 GROUP = gitlist
-VENDOR = gitlist.org
-URL = "http://www.gitlist.org"
+VENDOR = gitlist-php/gitlist
+URL = "https://gitlist-php.github.io/gitlist/"
 
 #BUILD Info
 PREFIX = /usr/share
