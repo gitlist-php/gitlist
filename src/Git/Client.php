@@ -17,7 +17,7 @@ class Client extends BaseClient
         if (isset($options['default_branch'])) { $this->setDefaultBranch($options['default_branch']); }
         if (isset($options['hidden'])) { $this->setHidden($options['hidden']); }
         if (isset($options['projects'])) { $this->setProjects($options['projects']); }
-        if (isset($options['hide_unless_gitdaemon'])) { $this->hideUnlessGitdaemon($options['hide_unless_gitdaemon']); }
+        if (isset($options['hide_unless_gitdaemon'])) { $this->setHideUnlessGitdaemon($options['hide_unless_gitdaemon']); }
     }
 
     public function getRepositoryFromName($paths, $repo)
@@ -195,6 +195,29 @@ class Client extends BaseClient
                 $this->hidden[] = $dir;
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Get hidden repository list
+     *
+     * @return array List of repositories to hide
+     */
+    protected function getHideUnlessGitdeamon()
+    {
+        return $this->hideUnlessGitdeamon;
+    }
+
+    /**
+     * Set the hidden repository list
+     *
+     * @param array $hidden List of repositories to hide
+     * @return object
+     */
+    protected function setHideUnlessGitdeamon($hidden)
+    {
+        $this->hideUnlessGitdeamon = $hidden;
 
         return $this;
     }
