@@ -2,7 +2,7 @@
     Options -MultiViews +SymLinksIfOwnerMatch
 
     RewriteEngine On
-    RewriteBase /
+    RewriteBase /gitlist/   # gitlist accessible at http://localhost/gitlist/
 
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^ index.php [L,NC]
