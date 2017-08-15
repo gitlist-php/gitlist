@@ -5,7 +5,7 @@ namespace GitList\Controller;
 use GitList\Git\Repository;
 use Gitter\Model\Commit\Commit;
 use Silex\Application;
-use Silex\ControllerProviderInterface;
+use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class NetworkController implements ControllerProviderInterface
@@ -87,12 +87,12 @@ class NetworkController implements ControllerProviderInterface
                 );
             }
         )->assert('repo', $app['util.routing']->getRepositoryRegex())
-        ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
-        ->value('commitishPath', null)
-        ->convert('commitishPath', 'escaper.argument:escape')
-        ->assert('page', '\d+')
-        ->value('page', '0')
-        ->bind('networkData');
+         ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
+         ->value('commitishPath', null)
+         ->convert('commitishPath', 'escaper.argument:escape')
+         ->assert('page', '\d+')
+         ->value('page', '0')
+         ->bind('networkData');
 
         $route->get(
             '{repo}/network/{commitishPath}',
@@ -116,10 +116,10 @@ class NetworkController implements ControllerProviderInterface
                 );
             }
         )->assert('repo', $app['util.routing']->getRepositoryRegex())
-        ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
-        ->value('commitishPath', null)
-        ->convert('commitishPath', 'escaper.argument:escape')
-        ->bind('network');
+         ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
+         ->value('commitishPath', null)
+         ->convert('commitishPath', 'escaper.argument:escape')
+         ->bind('network');
 
         return $route;
     }

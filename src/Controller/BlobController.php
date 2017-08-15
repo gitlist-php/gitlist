@@ -3,7 +3,7 @@
 namespace GitList\Controller;
 
 use Silex\Application;
-use Silex\ControllerProviderInterface;
+use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class BlobController implements ControllerProviderInterface
@@ -69,6 +69,26 @@ class BlobController implements ControllerProviderInterface
           ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
           ->convert('commitishPath', 'escaper.argument:escape')
           ->bind('blob_raw');
+
+        $route->get('{repo}/logpatch/{commitishPath}', function ($repo, $commitishPath) use ($app) {
+            $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
+
+            list($branch, $file) = $app['util.routing']
+                ->parseCommitishPathParam($commitishPath, $repo);
+
+            $filePatchesLog = $repository->getCommitsLogPatch($file);
+            $breadcrumbs = $app['util.view']->getBreadcrumbs($file);
+
+            return $app['twig']->render('logpatch.twig', array(
+                'branch'         => $branch,
+                'repo'           => $repo,
+                'breadcrumbs'    => $breadcrumbs,
+                'commits'        => $filePatchesLog,
+            ));
+        })->assert('repo', $app['util.routing']->getRepositoryRegex())
+          ->assert('commitishPath', '.+')
+          ->convert('commitishPath', 'escaper.argument:escape')
+          ->bind('logpatch');
 
         return $route;
     }

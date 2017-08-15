@@ -2,7 +2,7 @@
 
 /**
  * GitList: an elegant and modern git repository viewer
- * http://gitlist.org
+ * https://gitlist-php.github.io/gitlist/
  */
 
 if (!ini_get('date.timezone')) {
