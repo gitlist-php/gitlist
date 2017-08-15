@@ -13,9 +13,9 @@ class Client extends BaseClient
     public function __construct($options = null)
     {
         parent::__construct($options['path']);
-        $this->setDefaultBranch($options['default_branch']);
-        $this->setHidden($options['hidden']);
-        $this->setProjects($options['projects']);
+        if (isset($options['default_branch'])) { $this->setDefaultBranch($options['default_branch']); }
+        if (isset($options['hidden'])) { $this->setHidden($options['hidden']); }
+        if (isset($options['projects'])) { $this->setProjects($options['projects']); }
     }
 
     public function getRepositoryFromName($paths, $repo)

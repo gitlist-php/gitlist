@@ -4,7 +4,7 @@ namespace GitList;
 
 use Silex\Application as SilexApplication;
 use Silex\Provider\TwigServiceProvider;
-use Silex\Provider\UrlGeneratorServiceProvider;
+use Silex\Provider\RoutingServiceProvider;
 use GitList\Provider\GitServiceProvider;
 use GitList\Provider\RepositoryUtilServiceProvider;
 use GitList\Provider\ViewUtilServiceProvider;
@@ -70,10 +70,10 @@ class Application extends SilexApplication
 
         $this->register(new ViewUtilServiceProvider());
         $this->register(new RepositoryUtilServiceProvider());
-        $this->register(new UrlGeneratorServiceProvider());
+        $this->register(new RoutingServiceProvider());
         $this->register(new RoutingUtilServiceProvider());
 
-        $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
+        $this['twig'] = $this->extend('twig', function ($twig, $app) {
             $twig->addFilter(new \Twig_SimpleFilter('htmlentities', 'htmlentities'));
             $twig->addFilter(new \Twig_SimpleFilter('md5', 'md5'));
             $twig->addFilter(new \Twig_SimpleFilter('format_date', array($app, 'formatDate')));
@@ -81,9 +81,9 @@ class Application extends SilexApplication
             $twig->addFunction(new \Twig_SimpleFunction('avatar', array($app, 'getAvatar')));
 
             return $twig;
-        }));
+        });
 
-        $this['escaper.argument'] = $this->share(function() {
+        $this['escaper.argument'] = $this->factory(function() {
             return new Escaper\ArgumentEscaper();
         });
 
