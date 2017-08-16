@@ -41,6 +41,7 @@
 
             <div class="btn-group pull-right">
                 <a href="{{ path('commits', {repo: repo, commitishPath: commit.hash ~ '/' ~ diff.file}) }}"  class="btn btn-default btn-sm"><span class="fa fa-list-alt"></span> History</a>
+                <a href="{{ path('blame', {repo: repo, commitishPath: commit.hash ~ '/' ~ diff.file}) }}" class="btn btn-small"><i class="icon-bullhorn"></i> Blame</a>
                 <a href="{{ path('blob', {repo: repo, commitishPath: commit.hash ~'/' ~ diff.file}) }}"  class="btn btn-default btn-sm"><span class="fa fa-file"></span> View file @ {{ commit.shortHash }}</a>
             </div>
         </div>
