@@ -91,12 +91,14 @@ class CommitController implements ControllerProviderInterface
 
         $route->get('{repo}/commit/{commit}', function ($repo, $commit) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
+            $size = "incomplete"; # *** WORK HERE: set only when diff really is incomplete
             $commit = $repository->getCommit($commit);
             $branch = $repository->getHead();
 
             return $app['twig']->render('commit.twig', array(
                 'branch'         => $branch,
                 'repo'           => $repo,
+                'size'           => $size,
                 'commit'         => $commit
             ));
         })->assert('repo', $app['util.routing']->getRepositoryRegex())
