@@ -3,7 +3,7 @@
 namespace GitList\Controller;
 
 use Silex\Application;
-use Silex\ControllerProviderInterface;
+use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class TreeGraphController implements ControllerProviderInterface
@@ -63,10 +63,10 @@ class TreeGraphController implements ControllerProviderInterface
                 );
             }
         )->assert('repo', $app['util.routing']->getRepositoryRegex())
-            ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
-            ->value('commitishPath', null)
-            ->convert('commitishPath', 'escaper.argument:escape')
-            ->bind('treegraph');
+         ->assert('commitishPath', $app['util.routing']->getCommitishPathRegex())
+         ->value('commitishPath', null)
+         ->convert('commitishPath', 'escaper.argument:escape')
+         ->bind('treegraph');
 
         return $route;
     }
