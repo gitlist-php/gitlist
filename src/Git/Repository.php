@@ -106,12 +106,10 @@ class Repository extends BaseRepository
 
         if ($commit->getParentsHash()) {
             $command = 'diff ';
-            if ($size == "full")
-            {
+            if ($size == "full") {
                 $command .= ' -U999999 ';
             }
             $command .= $commitHash . '~1..' . $commitHash;
-
             $logs = explode("\n", $this->getClient()->run($this, $command));
         }
 
