@@ -105,7 +105,8 @@ class CommitController implements ControllerProviderInterface
 
         $route->get('{repo}/commit/{commit}/full', function ($repo, $commit) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
-            $commit = $repository->getCommit($commit, "full");
+            $size = "full";
+            $commit = $repository->getCommit($commit, $size);
             $branch = $repository->getHead();
 
             return $app['twig']->render('commit.twig', array(
