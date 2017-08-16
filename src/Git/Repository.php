@@ -80,7 +80,7 @@ class Repository extends BaseRepository
      * @param  string $commitHash Hash of the specific commit to read data
      * @return array  Commit data
      */
-    public function getCommit($commitHash, $size)
+    public function getCommit($commitHash, $size = "")
     {
         $logs = $this->getClient()->run($this,
                   "show --pretty=format:\"<item><hash>%H</hash>"
