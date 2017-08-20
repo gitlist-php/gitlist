@@ -76,7 +76,7 @@ class BlobController implements ControllerProviderInterface
             list($branch, $file) = $app['util.routing']
                 ->parseCommitishPathParam($commitishPath, $repo);
 
-            $filePatchesLog = $repository->getCommitsLogPatch($file);
+            $filePatchesLog = $repository->getCommitsLogPatch($file,$branch);
             $breadcrumbs = $app['util.view']->getBreadcrumbs($file);
 
             return $app['twig']->render('logpatch.twig', array(
