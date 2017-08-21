@@ -38,6 +38,8 @@ class Repository extends BaseRepository
      * Show Patches that where apllied to the selected file
      *
      * @param  string $file File path for which we will retrieve a list of patch logs
+     * @param  string $revisions Revision range used for the pagination of commits
+     * @param  int $max_count Maximum number of commits to process for one page
      * @return array  Collection of Commits data
      */
     public function getCommitsLogPatch($file, $revisions = "", $max_count = 100)
