@@ -38,9 +38,11 @@ class Repository extends BaseRepository
      * Show Patches that where apllied to the selected file
      *
      * @param  string $file File path for which we will retrieve a list of patch logs
+     * @param  string $revisions Revision range used for the pagination of commits
+     * @param  int $max_count Maximum number of commits to process for one page
      * @return array  Collection of Commits data
      */
-    public function getCommitsLogPatch($file)
+    public function getCommitsLogPatch($file, $revisions = "", $max_count = 100)
     {
         $record_delimiter = chr(hexdec("0x1e"));
         $file_patches = $this->getClient()->run($this,
@@ -51,23 +53,31 @@ class Repository extends BaseRepository
             . "<commiter_date>%ct</commiter_date>"
             . "<message><![CDATA[%s]]></message>"
             . "<body><![CDATA[%b]]></body>"
-            . "</item>\" -- \"$file\""
+            . "</item>\" --max-count=".($max_count+1)." $revisions -- \"$file\""
         );
 
         $patch_collection = array();
-        foreach ( preg_split('/('.$record_delimiter.'\<item\>)/', $file_patches,null, PREG_SPLIT_NO_EMPTY) as $patches) {
-            $patches = '<item>' . $patches;
-            $xmlEnd = strpos($patches, '</item>') + 7;
-            $commitInfo = substr($patches, 0, $xmlEnd);
-            $commitData = substr($patches, $xmlEnd);
+        $format = new PrettyFormat;
+        $commits = preg_split('/'.$record_delimiter.'(?:<item>)/', $file_patches, null, PREG_SPLIT_NO_EMPTY);
+        $file_patches = null;
+        $pagination = (count ($commits) == $max_count+1);
+        $count = 0;
+        foreach ($commits as $patch) {
+            $xmlEnd = strpos($patch, '</item>') + strlen ('</item>');
+            $commitInfo = "<item>".substr($patch, 0, $xmlEnd);
+            $commitData = substr($patch, $xmlEnd);
             $logs = explode("\n", $commitData);
 
             // Read commit metadata
-            $format = new PrettyFormat;
             $data = $format->parse($commitInfo);
             $commit = new Commit;
             $commit->importData($data[0]);
             $commit->setDiffs($this->readDiffLogs($logs));
+
+            // Limit number of commits due to memory constrains
+            $count++;
+            if ($pagination && ($count == $max_count+1)) { $commit->setShortHash(null); }
+
             $patch_collection[] = $commit;
         }
 
