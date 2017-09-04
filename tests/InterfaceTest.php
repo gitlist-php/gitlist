@@ -221,13 +221,13 @@ class InterfaceTest extends WebTestCase
 
         $this->assertTrue($client->getResponse()->isOk());
         $this->assertCount(1, $crawler->filter('.breadcrumb .active:contains("test.php")'));
-        $this->assertEquals('/GitTest/raw/master/test.php',
-                $crawler->filter('.source-header .btn-group a')->eq(0)->attr('href'));
-        $this->assertEquals('/GitTest/blame/master/test.php',
-                $crawler->filter('.source-header .btn-group a')->eq(1)->attr('href'));
-        $this->assertEquals('/GitTest/logpatch/master/test.php',
-                $crawler->filter('.source-header .btn-group a')->eq(2)->attr('href'));        
         $this->assertEquals('/GitTest/commits/master/test.php',
+                $crawler->filter('.source-header .btn-group a')->eq(0)->attr('href'));
+        $this->assertEquals('/GitTest/logpatch/master/test.php',
+                $crawler->filter('.source-header .btn-group a')->eq(1)->attr('href'));
+        $this->assertEquals('/GitTest/blame/master/test.php',
+                $crawler->filter('.source-header .btn-group a')->eq(2)->attr('href'));
+        $this->assertEquals('/GitTest/raw/master/test.php',
                 $crawler->filter('.source-header .btn-group a')->eq(3)->attr('href'));
     }
 

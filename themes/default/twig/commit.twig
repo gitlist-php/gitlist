@@ -40,6 +40,8 @@
 
             <div class="btn-group pull-right">
                 <a href="{{ path('commits', {repo: repo, commitishPath: commit.hash ~ '/' ~ diff.file}) }}" class="btn btn-small"><i class="icon-list-alt"></i> History</a>
+                <a href="{{ path('logpatch', {repo: repo, commitishPath: commit.hash ~ '/' ~ diff.file}) }}" class="btn btn-small"><i class="icon-calendar"></i> Patch Log</a>
+                <a href="{{ path('blame', {repo: repo, commitishPath: commit.hash ~ '/' ~ diff.file}) }}" class="btn btn-small"><i class="icon-bullhorn"></i> Blame</a>
                 <a href="{{ path('blob', {repo: repo, commitishPath: commit.hash ~'/' ~ diff.file}) }}" class="btn btn-small"><i class="icon-file"></i> View file @ {{ commit.shortHash }}</a>
             </div>
         </div>
